@@ -1,4 +1,4 @@
-# VHRent - Vehicle Rental Management System
+# rentalinCo - Vehicle Rental Management System
 
 Sistem manajemen penyewaan kendaraan berbasis web dengan PHP dan MySQL.
 
