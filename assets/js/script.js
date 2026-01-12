@@ -1,5 +1,5 @@
 /**
- * VHRent - Vehicle Rental Management System
+ * Vehicle Rental Management System
  * Main JavaScript Application
  */
 
@@ -1240,6 +1240,18 @@ function renderPagination(containerId, currentPage, totalPages, onPageChange) {
 function toggleSidebar() {
     document.querySelector('.sidebar').classList.toggle('active');
     document.querySelector('.sidebar-overlay').classList.toggle('active');
+}
+
+function toggleDesktopSidebar() {
+    document.body.classList.toggle('sidebar-collapsed');
+
+    // Update icon
+    const icon = document.querySelector('.desktop-menu-btn i');
+    if (document.body.classList.contains('sidebar-collapsed')) {
+        icon.classList.replace('ri-menu-fold-line', 'ri-menu-unfold-line');
+    } else {
+        icon.classList.replace('ri-menu-unfold-line', 'ri-menu-fold-line');
+    }
 }
 
 

@@ -1,5 +1,5 @@
 /* 
- * VHRent - Vehicle Rental Management System
+ * Vehicle Rental Management System
  * Modern & Elegant Design System
  */
 
@@ -1036,6 +1036,44 @@ select.form-control {
     color: var(--gray-500);
 }
 
+/* Sidebar Collapsed State */
+body.sidebar-collapsed .sidebar {
+    width: var(--sidebar-collapsed);
+}
+
+body.sidebar-collapsed .main-content {
+    margin-left: var(--sidebar-collapsed);
+}
+
+body.sidebar-collapsed .sidebar-brand-text,
+body.sidebar-collapsed .sidebar-nav-title,
+body.sidebar-collapsed .sidebar-nav-item span,
+body.sidebar-collapsed .sidebar-user-info,
+body.sidebar-collapsed .sidebar-user button {
+    display: none;
+}
+
+body.sidebar-collapsed .sidebar-brand {
+    justify-content: center;
+    padding: var(--space-6) 0;
+}
+
+body.sidebar-collapsed .sidebar-nav-item {
+    justify-content: center;
+    padding: var(--space-3);
+}
+
+body.sidebar-collapsed .sidebar-nav-item i {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+body.sidebar-collapsed .sidebar-footer {
+    display: flex;
+    justify-content: center;
+    padding: var(--space-4);
+}
+
 /* Main Content */
 .main-content {
     flex: 1;
@@ -1612,15 +1650,51 @@ select.form-control {
 }
 
 /* ==================== Responsive ==================== */
-@media (max-width: 1200px) {
+
+/* Large Desktop (1400px+) */
+@media (min-width: 1400px) {
     .grid-cols-4 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .grid-cols-3 {
         grid-template-columns: repeat(3, 1fr);
     }
 }
 
-@media (max-width: 992px) {
+/* Desktop (1200px - 1400px) */
+@media (max-width: 1400px) {
+    .grid-cols-4 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
 
-    .grid-cols-4,
+@media (max-width: 1200px) {
+    .grid-cols-4 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .stat-card {
+        padding: var(--space-5);
+    }
+
+    .stat-value {
+        font-size: 1.5rem;
+    }
+
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1.25rem;
+    }
+}
+
+/* Tablet Landscape (992px - 1200px) */
+@media (max-width: 992px) {
+    .grid-cols-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
     .grid-cols-3 {
         grid-template-columns: repeat(2, 1fr);
     }
@@ -1637,8 +1711,44 @@ select.form-control {
         margin-left: 0;
     }
 
+    /* Disable collapsed state on mobile */
+    body.sidebar-collapsed .sidebar {
+        width: var(--sidebar-width);
+        transform: translateX(-100%);
+    }
+
+    body.sidebar-collapsed .sidebar.active {
+        transform: translateX(0);
+    }
+
+    body.sidebar-collapsed .main-content {
+        margin-left: 0;
+    }
+
+    body.sidebar-collapsed .sidebar-brand-text,
+    body.sidebar-collapsed .sidebar-nav-title,
+    body.sidebar-collapsed .sidebar-nav-item span,
+    body.sidebar-collapsed .sidebar-user-info,
+    body.sidebar-collapsed .sidebar-user button {
+        display: block;
+    }
+
+    body.sidebar-collapsed .sidebar-brand {
+        justify-content: flex-start;
+        padding: var(--space-6);
+    }
+
+    body.sidebar-collapsed .sidebar-nav-item {
+        justify-content: flex-start;
+        padding: var(--space-3) var(--space-4);
+    }
+
     .mobile-menu-btn {
         display: flex;
+    }
+
+    .desktop-menu-btn {
+        display: none;
     }
 
     .sidebar-overlay {
@@ -1655,11 +1765,66 @@ select.form-control {
     .sidebar-overlay.active {
         display: block;
     }
+
+    .header-title {
+        font-size: 1.125rem;
+    }
+
+    .stat-card {
+        padding: var(--space-4);
+        gap: var(--space-3);
+    }
+
+    .stat-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 1.125rem;
+    }
+
+    .stat-value {
+        font-size: 1.35rem;
+    }
+
+    .stat-title {
+        font-size: 0.75rem;
+    }
+
+    /* Table responsive */
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table {
+        min-width: 700px;
+    }
+
+    /* Form row */
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    /* Card adjustments */
+    .card-header {
+        padding: var(--space-4) var(--space-5);
+        flex-wrap: wrap;
+        gap: var(--space-3);
+    }
+
+    .card-body {
+        padding: var(--space-5);
+    }
+
+    .card-title {
+        font-size: 1rem;
+    }
 }
 
+/* Tablet Portrait (768px - 992px) */
 @media (max-width: 768px) {
     :root {
         --space-8: 1.5rem;
+        --header-height: 60px;
     }
 
     .grid-cols-4,
@@ -1671,15 +1836,40 @@ select.form-control {
     .page-header {
         flex-direction: column;
         align-items: flex-start;
+        gap: var(--space-3);
+    }
+
+    .page-title {
+        font-size: 1.25rem;
     }
 
     .page-actions {
         width: 100%;
         justify-content: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .page-actions .btn {
+        flex: 1;
+        min-width: 120px;
     }
 
     .header {
         padding: 0 var(--space-4);
+        height: var(--header-height);
+    }
+
+    .header-left {
+        gap: var(--space-2);
+    }
+
+    .header-right {
+        gap: var(--space-2);
+    }
+
+    .header-btn {
+        width: 36px;
+        height: 36px;
     }
 
     .page-content {
@@ -1689,11 +1879,17 @@ select.form-control {
     .footer-content {
         flex-direction: column;
         text-align: center;
+        gap: var(--space-2);
+    }
+
+    .footer {
+        padding: var(--space-4);
     }
 
     .search-filters {
         flex-direction: column;
         align-items: stretch;
+        gap: var(--space-3);
     }
 
     .search-box {
@@ -1702,42 +1898,400 @@ select.form-control {
 
     .filter-group {
         flex-wrap: wrap;
+        width: 100%;
+    }
+
+    .filter-group select {
+        flex: 1;
+        min-width: 120px;
     }
 
     .modal {
-        margin: var(--space-4);
-        max-height: calc(100vh - var(--space-8));
+        margin: var(--space-3);
+        max-height: calc(100vh - var(--space-6));
+        border-radius: var(--radius-xl);
+    }
+
+    .modal-header {
+        padding: var(--space-4);
+    }
+
+    .modal-body {
+        padding: var(--space-4);
+        max-height: 50vh;
+    }
+
+    .modal-footer {
+        padding: var(--space-3) var(--space-4);
+    }
+
+    .modal-title {
+        font-size: 1.125rem;
     }
 
     .table th,
     .table td {
-        padding: var(--space-3);
-    }
-}
-
-@media (max-width: 480px) {
-    .login-card {
-        padding: var(--space-6);
+        padding: var(--space-3) var(--space-2);
+        font-size: 0.8125rem;
     }
 
-    h1 {
-        font-size: 1.5rem;
+    .table {
+        min-width: 600px;
     }
 
-    h2 {
-        font-size: 1.25rem;
+    /* Stat cards in 2 columns on tablet */
+    .grid.grid-cols-4 {
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .stat-card {
+        flex-direction: column;
+        text-align: center;
         padding: var(--space-4);
     }
 
+    .stat-icon {
+        margin: 0 auto;
+    }
+
+    .stat-content {
+        text-align: center;
+    }
+
+    /* Vehicle card adjustments */
+    .vehicle-image {
+        height: 200px;
+    }
+
+    .vehicle-content {
+        padding: var(--space-4);
+    }
+
+    .vehicle-footer {
+        padding: var(--space-3) var(--space-4);
+    }
+
+    /* Alert adjustments */
+    .alert {
+        padding: var(--space-3) var(--space-4);
+        font-size: 0.875rem;
+    }
+
+    .alert-title {
+        font-size: 0.875rem;
+    }
+
+    .alert-message {
+        font-size: 0.8125rem;
+    }
+
+    /* Badge adjustments */
+    .badge {
+        font-size: 0.6875rem;
+        padding: var(--space-1) var(--space-2);
+    }
+
+    /* Button adjustments */
+    .btn {
+        padding: var(--space-2) var(--space-4);
+        font-size: 0.8125rem;
+    }
+
+    .btn-sm {
+        padding: var(--space-1) var(--space-2);
+        font-size: 0.75rem;
+    }
+
+    .btn-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .btn-icon.btn-sm {
+        width: 30px;
+        height: 30px;
+    }
+
+    /* Toast adjustments */
+    .toast-container {
+        top: var(--space-4);
+        right: var(--space-4);
+        left: var(--space-4);
+    }
+
+    .toast {
+        min-width: auto;
+        max-width: 100%;
+    }
+
+    /* Login adjustments */
+    .login-container {
+        max-width: 100%;
+        padding: 0 var(--space-4);
+    }
+}
+
+/* Mobile Large (576px - 768px) */
+@media (max-width: 576px) {
+    :root {
+        --space-6: 1rem;
+        --space-8: 1rem;
+    }
+
+    .grid.grid-cols-4 {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-3);
+    }
+
+    .stat-card {
+        padding: var(--space-3);
+    }
+
+    .stat-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
     .stat-value {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
+    }
+
+    .stat-title {
+        font-size: 0.6875rem;
+    }
+
+    .stat-subtitle {
+        font-size: 0.6875rem;
+    }
+
+    /* Card adjustments */
+    .card-header {
+        padding: var(--space-3) var(--space-4);
+    }
+
+    .card-body {
+        padding: var(--space-4);
+    }
+
+    .card-title {
+        font-size: 0.9375rem;
+    }
+
+    /* Form adjustments */
+    .form-control {
+        padding: var(--space-2) var(--space-3);
+        font-size: 0.875rem;
+    }
+
+    .form-label {
+        font-size: 0.8125rem;
+    }
+
+    .form-group {
+        margin-bottom: var(--space-4);
+    }
+
+    /* Table on mobile - horizontal scroll */
+    .table {
+        min-width: 500px;
+    }
+
+    .table th,
+    .table td {
+        padding: var(--space-2);
+        font-size: 0.75rem;
+    }
+
+    .table-actions {
+        gap: var(--space-1);
+    }
+
+    /* Vehicle card */
+    .vehicle-image {
+        height: 160px;
+    }
+
+    .vehicle-title {
+        font-size: 1rem;
+    }
+
+    .vehicle-price {
+        font-size: 1.125rem;
+    }
+
+    /* Pagination */
+    .pagination {
+        gap: var(--space-1);
+    }
+
+    .pagination-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 0.8125rem;
+    }
+}
+
+/* Mobile Small (480px and below) */
+@media (max-width: 480px) {
+    .login-page {
+        padding: var(--space-3);
+    }
+
+    .login-card {
+        padding: var(--space-5);
+    }
+
+    .login-title {
+        font-size: 1.25rem;
+    }
+
+    .login-subtitle {
+        font-size: 0.8125rem;
+    }
+
+    h1,
+    .page-title {
+        font-size: 1.25rem;
+    }
+
+    h2,
+    .header-title {
+        font-size: 1rem;
+    }
+
+    h3,
+    .card-title,
+    .modal-title {
+        font-size: 0.9375rem;
+    }
+
+    /* Header compact */
+    .header {
+        padding: 0 var(--space-3);
+    }
+
+    .header-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+    }
+
+    /* Page content */
+    .page-content {
+        padding: var(--space-3);
+    }
+
+    /* Stat cards single column on very small */
+    .grid.grid-cols-4 {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--space-2);
+    }
+
+    .stat-card {
+        padding: var(--space-3);
+        gap: var(--space-2);
+    }
+
+    .stat-icon {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9375rem;
+    }
+
+    .stat-value {
+        font-size: 1.125rem;
+    }
+
+    .stat-title {
+        font-size: 0.625rem;
+        letter-spacing: 0;
+    }
+
+    .stat-subtitle {
+        display: none;
     }
 
     .btn {
-        padding: var(--space-2) var(--space-4);
+        padding: var(--space-2) var(--space-3);
+        font-size: 0.75rem;
+    }
+
+    .btn-lg {
+        padding: var(--space-3) var(--space-4);
+        font-size: 0.875rem;
+    }
+
+    .btn i {
+        font-size: 1rem;
+    }
+
+    /* Modal full screen on mobile */
+    .modal-overlay {
+        padding: 0;
+    }
+
+    .modal {
+        margin: 0;
+        max-height: 100vh;
+        height: 100vh;
+        border-radius: 0;
+    }
+
+    .modal-body {
+        max-height: calc(100vh - 140px);
+    }
+
+    /* Sidebar */
+    .sidebar {
+        width: 100%;
+    }
+
+    .sidebar-brand {
+        padding: var(--space-4);
+    }
+
+    .sidebar-nav {
+        padding: var(--space-3);
+    }
+
+    /* Footer */
+    .footer {
+        padding: var(--space-3);
+    }
+
+    .footer-text,
+    .footer-developer {
+        font-size: 0.75rem;
+    }
+
+    /* Alerts compact */
+    .alert {
+        padding: var(--space-3);
+        font-size: 0.8125rem;
+    }
+
+    .alert-icon {
+        font-size: 1rem;
+    }
+
+    /* Empty state */
+    .empty-state {
+        padding: var(--space-8) var(--space-4);
+    }
+
+    .empty-state-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.5rem;
+    }
+
+    .empty-state-title {
+        font-size: 1rem;
+    }
+
+    .empty-state-text {
+        font-size: 0.8125rem;
     }
 }
 
