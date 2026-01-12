@@ -1,0 +1,439 @@
+================================================================================
+ACTIVITY DIAGRAM (FORMAT SWIMLANE/TABEL) - VHRENT
+PlantUML Code - Copy ke https://www.plantuml.com/plantuml/uml
+================================================================================
+
+
+================================================================================
+1. ACTIVITY DIAGRAM - LOGIN
+================================================================================
+@startuml AD_Login
+title Activity Diagram - Login
+
+|User|
+start
+:Buka Halaman Login;
+:Input Username & Password;
+:Klik Login;
+
+|Sistem|
+:Validasi Input;
+:Cek Database;
+
+if (Valid?) then (ya)
+    :Buat Session;
+    |User|
+    :Masuk Dashboard;
+    stop
+else (tidak)
+    |User|
+    :Lihat Pesan Error;
+    stop
+endif
+
+@enduml
+
+
+================================================================================
+2. ACTIVITY DIAGRAM - REGISTRASI
+================================================================================
+@startuml AD_Registrasi
+title Activity Diagram - Registrasi
+
+|User|
+start
+:Buka Form Registrasi;
+:Isi Data Lengkap;
+:Klik Daftar;
+
+|Sistem|
+:Validasi Format Data;
+:Cek Email/NIK di Database;
+
+if (Data Unik?) then (ya)
+    :Hash Password;
+    :Simpan ke Database;
+    |User|
+    :Lihat Pesan Sukses;
+    :Redirect ke Login;
+    stop
+else (tidak)
+    |User|
+    :Lihat Pesan Error;
+    stop
+endif
+
+@enduml
+
+
+================================================================================
+3. ACTIVITY DIAGRAM - LUPA PASSWORD
+================================================================================
+@startuml AD_LupaPassword
+title Activity Diagram - Lupa Password
+
+|User|
+start
+:Klik Lupa Password;
+:Input Username;
+
+|Sistem|
+:Cari User di Database;
+
+if (Ditemukan?) then (ya)
+    :Tampilkan Hint NIM;
+    |User|
+    :Input NIM & Password Baru;
+    |Sistem|
+    :Verifikasi NIM;
+    if (NIM Cocok?) then (ya)
+        :Update Password;
+        |User|
+        :Lihat Pesan Sukses;
+        stop
+    else (tidak)
+        |User|
+        :Lihat Error;
+        stop
+    endif
+else (tidak)
+    |User|
+    :Lihat Error;
+    stop
+endif
+
+@enduml
+
+
+================================================================================
+4. ACTIVITY DIAGRAM - KELOLA KENDARAAN
+================================================================================
+@startuml AD_KelolaKendaraan
+title Activity Diagram - Kelola Kendaraan
+
+|Admin|
+start
+:Buka Menu Kendaraan;
+
+|Sistem|
+:Query Data Kendaraan;
+:Tampilkan Daftar;
+
+|Admin|
+:Pilih Aksi (Tambah/Edit/Hapus);
+
+|Sistem|
+:Tampilkan Form;
+
+|Admin|
+:Isi/Edit Data;
+:Klik Simpan;
+
+|Sistem|
+:Validasi Data;
+:Simpan ke Database;
+:Refresh Tampilan;
+
+|Admin|
+:Lihat Hasil;
+stop
+
+@enduml
+
+
+================================================================================
+5. ACTIVITY DIAGRAM - KELOLA PELANGGAN
+================================================================================
+@startuml AD_KelolaPelanggan
+title Activity Diagram - Kelola Pelanggan
+
+|Admin|
+start
+:Buka Menu Pelanggan;
+
+|Sistem|
+:Query Data Pelanggan;
+:Tampilkan Daftar;
+
+|Admin|
+:Pilih Aksi (Tambah/Edit/Hapus);
+
+|Sistem|
+:Tampilkan Form;
+
+|Admin|
+:Isi/Edit Data;
+:Klik Simpan;
+
+|Sistem|
+:Validasi NIK Unik;
+:Simpan ke Database;
+:Refresh Tampilan;
+
+|Admin|
+:Lihat Hasil;
+stop
+
+@enduml
+
+
+================================================================================
+6. ACTIVITY DIAGRAM - KELOLA TRANSAKSI
+================================================================================
+@startuml AD_KelolaTransaksi
+title Activity Diagram - Kelola Transaksi
+
+|Admin|
+start
+:Buka Menu Transaksi;
+:Klik Buat Transaksi;
+:Pilih Pelanggan;
+:Pilih Kendaraan;
+:Input Tanggal Sewa;
+
+|Sistem|
+:Cek Stok Kendaraan;
+:Hitung Total Biaya;
+:Tampilkan Rincian;
+
+|Admin|
+:Konfirmasi Transaksi;
+
+|Sistem|
+:Generate Kode Transaksi;
+:Simpan ke Database;
+:Kurangi Stok;
+
+|Admin|
+:Lihat Invoice;
+stop
+
+@enduml
+
+
+================================================================================
+7. ACTIVITY DIAGRAM - PROSES PENGEMBALIAN
+================================================================================
+@startuml AD_ProsesPengembalian
+title Activity Diagram - Proses Pengembalian
+
+|Admin|
+start
+:Pilih Transaksi Aktif;
+:Klik Proses Kembali;
+:Input Tanggal Kembali;
+
+|Sistem|
+:Hitung Selisih Hari;
+
+if (Terlambat?) then (ya)
+    :Hitung Denda;
+    :Simpan Data Denda;
+    :Update Status Terlambat;
+else (tidak)
+    :Update Status Dikembalikan;
+endif
+
+:Tambah Stok Kendaraan;
+
+|Admin|
+:Lihat Hasil;
+stop
+
+@enduml
+
+
+================================================================================
+8. ACTIVITY DIAGRAM - KELOLA DENDA
+================================================================================
+@startuml AD_KelolaDenda
+title Activity Diagram - Kelola Denda
+
+|Admin|
+start
+:Buka Menu Denda;
+
+|Sistem|
+:Query Daftar Denda;
+:Tampilkan Daftar;
+
+|Admin|
+:Pilih Denda;
+:Klik Bayar;
+
+|Sistem|
+:Update Status Lunas;
+:Simpan Tanggal Bayar;
+
+|Admin|
+:Lihat Konfirmasi;
+stop
+
+@enduml
+
+
+================================================================================
+9. ACTIVITY DIAGRAM - LIHAT LAPORAN
+================================================================================
+@startuml AD_LihatLaporan
+title Activity Diagram - Lihat Laporan
+
+|Admin|
+start
+:Buka Menu Laporan;
+:Pilih Filter Tanggal;
+:Pilih Jenis Laporan;
+
+|Sistem|
+:Query Data;
+:Generate Statistik;
+:Tampilkan Dashboard;
+
+|Admin|
+:Lihat Laporan;
+
+if (Export?) then (ya)
+    |Sistem|
+    :Generate File;
+    |Admin|
+    :Download File;
+endif
+
+stop
+
+@enduml
+
+
+================================================================================
+10. ACTIVITY DIAGRAM - LIHAT KATALOG
+================================================================================
+@startuml AD_LihatKatalog
+title Activity Diagram - Lihat Katalog
+
+|Pelanggan|
+start
+:Buka Website;
+
+|Sistem|
+:Query Kendaraan Tersedia;
+:Tampilkan Katalog;
+
+|Pelanggan|
+:Filter/Cari Kendaraan;
+
+|Sistem|
+:Filter Data;
+:Tampilkan Hasil;
+
+|Pelanggan|
+:Pilih Kendaraan;
+
+|Sistem|
+:Tampilkan Detail;
+
+|Pelanggan|
+:Lihat Info Kendaraan;
+stop
+
+@enduml
+
+
+================================================================================
+11. ACTIVITY DIAGRAM - BOOKING KENDARAAN
+================================================================================
+@startuml AD_BookingKendaraan
+title Activity Diagram - Booking Kendaraan
+
+|Pelanggan|
+start
+:Klik Booking;
+
+|Sistem|
+:Cek Login;
+
+if (Sudah Login?) then (tidak)
+    |Pelanggan|
+    :Login/Registrasi;
+endif
+
+|Sistem|
+:Tampilkan Form Booking;
+
+|Pelanggan|
+:Input Tanggal Sewa;
+:Klik Konfirmasi;
+
+|Sistem|
+:Hitung Total Biaya;
+:Simpan Pemesanan;
+:Generate Invoice;
+
+|Pelanggan|
+:Lihat Invoice;
+stop
+
+@enduml
+
+
+================================================================================
+12. ACTIVITY DIAGRAM - LIHAT INVOICE
+================================================================================
+@startuml AD_LihatInvoice
+title Activity Diagram - Lihat Invoice
+
+|Pelanggan|
+start
+:Booking Berhasil;
+
+|Sistem|
+:Generate Invoice;
+:Tampilkan Invoice;
+
+|Pelanggan|
+:Lihat Detail Invoice;
+:Pilih Aksi;
+
+if (Cetak?) then (ya)
+    |Sistem|
+    :Generate PDF;
+    |Pelanggan|
+    :Download/Print;
+endif
+
+stop
+
+@enduml
+
+
+================================================================================
+13. ACTIVITY DIAGRAM - HUBUNGI WHATSAPP
+================================================================================
+@startuml AD_HubungiWhatsApp
+title Activity Diagram - Hubungi WhatsApp
+
+|Pelanggan|
+start
+:Klik Tombol WhatsApp;
+
+|Sistem|
+:Generate Pesan Otomatis;
+:Buka Link WhatsApp;
+
+|Pelanggan|
+:Kirim Pesan ke Admin;
+
+|Admin|
+:Terima Pesan;
+:Konfirmasi Booking;
+
+|Pelanggan|
+:Terima Konfirmasi;
+:Proses Pembayaran;
+stop
+
+@enduml
+
+
+================================================================================
+END OF ACTIVITY DIAGRAMS (SWIMLANE FORMAT)
+================================================================================

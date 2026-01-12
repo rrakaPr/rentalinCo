@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="rentalinCo by rakaRent - Sistem Manajemen Penyewaan Kendaraan Modern">
+    <meta name="author" content="M. Rizky Raka Pratama">
+    <title>rentalinCo by rakaRent - Vehicle Rental Management System</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="img/logo.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- ==================== LOGIN PAGE ==================== -->
+    <div id="loginPage" class="login-page">
+        <div class="login-container">
+            <div class="login-card">
+                <h1 class="login-title">
+                    rentalinCo
+                    <span style="display: block; font-size: 0.4em; opacity: 0.6; font-weight: 400; margin-top: 5px;">by
+                        rakaRent</span>
+                </h1>
+                <p class="login-subtitle">Masuk untuk mengelola sistem</p>
+
+                <form class="login-form" onsubmit="login(event)">
+                    <div class="form-group">
+                        <label class="form-label" for="loginUsername">Username</label>
+                        <div class="input-group">
+                            <i class="input-group-icon ri-user-line"></i>
+                            <input type="text" class="form-control has-icon" id="loginUsername" name="username"
+                                placeholder="Masukkan username" required autocomplete="username">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="loginPassword">Password</label>
+                        <div class="input-group">
+                            <i class="input-group-icon ri-lock-line"></i>
+                            <input type="password" class="form-control has-icon" id="loginPassword" name="password"
+                                placeholder="Masukkan password" required autocomplete="current-password">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="ri-login-box-line"></i> Masuk
+                    </button>
+                </form>
+
+                <div class="login-footer">
+                    <a href="#" onclick="openModal('forgotModal'); return false;">
+                        <i class="ri-question-line"></i> Lupa Password?
+                    </a>
+                    <span style="margin: 0 8px; color: var(--text-muted);">|</span>
+                    <a href="#" onclick="openModal('registerModal'); return false;">
+                        <i class="ri-user-add-line"></i> Buat Akun
+                    </a>
+                </div>
+            </div>
+
+            <div class="login-footer">
+                &copy; 2026 rentalinCo by rakaRent. Developed by <strong>Rizky Raka</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Lupa Password</h3>
+                <button class="modal-close" onclick="closeModal('forgotModal'); resetForgotForm();">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Step 1: Enter Username -->
+                <div id="forgotStep1">
+                    <p class="text-muted mb-6">Masukkan username Anda untuk mendapatkan hint password.</p>
+                    <form id="forgotForm" onsubmit="forgotPassword(event)">
+                        <div class="form-group">
+                            <label class="form-label required" for="forgotUsername">Username</label>
+                            <input type="text" class="form-control" id="forgotUsername" name="username"
+                                placeholder="Masukkan username" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width:100%">
+                            <i class="ri-send-plane-line"></i> Dapatkan Hint
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Step 2: Enter NIM and New Password -->
+                <div id="forgotStep2" class="hidden">
+                    <div class="alert alert-info mb-6">
+                        <i class="alert-icon ri-information-line"></i>
+                        <div class="alert-content">
+                            <p class="alert-message">Masukkan NIM 9 angka yang terdaftar di akun Anda.</p>
+                        </div>
+                    </div>
+                    <form id="resetForm" onsubmit="resetPassword(event)">
+                        <input type="hidden" id="resetUsername">
+                        <div class="form-group">
+                            <label class="form-label required" for="resetNim">NIM (9 angka)</label>
+                            <input type="text" class="form-control" id="resetNim" name="nim" placeholder="Masukkan NIM"
+                                maxlength="9" pattern="[0-9]{9}" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required" for="resetPassword">Password Baru</label>
+                            <input type="password" class="form-control" id="resetPassword" name="new_password"
+                                placeholder="Minimal 6 karakter" minlength="6" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required" for="resetConfirm">Konfirmasi Password</label>
+                            <input type="password" class="form-control" id="resetConfirm" name="confirm_password"
+                                placeholder="Ulangi password baru" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width:100%">
+                            <i class="ri-lock-password-line"></i> Reset Password
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Buat Akun Baru</h3>
+                <button class="modal-close" onclick="closeModal('registerModal')">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted mb-6">Daftar untuk mengakses sistem manajemen penyewaan kendaraan.</p>
+                <form id="registerForm" onsubmit="register(event)">
+                    <div class="form-group">
+                        <label class="form-label required" for="regNamaLengkap">Nama Lengkap</label>
+                        <input type="text" class="form-control" id="regNamaLengkap" name="nama_lengkap"
+                            placeholder="Masukkan nama lengkap" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label required" for="regUsername">Username</label>
+                        <input type="text" class="form-control" id="regUsername" name="username"
+                            placeholder="3-30 karakter (huruf, angka, underscore)" pattern="[a-zA-Z0-9_]{3,30}"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label required" for="regNim">NIM (9 angka)</label>
+                        <input type="text" class="form-control" id="regNim" name="nim"
+                            placeholder="Masukkan NIM 9 angka" maxlength="9" pattern="[0-9]{9}" required>
+                        <small class="text-muted">NIM digunakan untuk reset password</small>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="regEmail">Email</label>
+                        <input type="email" class="form-control" id="regEmail" name="email"
+                            placeholder="email@example.com (opsional)">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label required" for="regPassword">Password</label>
+                        <input type="password" class="form-control" id="regPassword" name="password"
+                            placeholder="Minimal 6 karakter" minlength="6" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label required" for="regConfirmPassword">Konfirmasi Password</label>
+                        <input type="password" class="form-control" id="regConfirmPassword" name="confirm_password"
+                            placeholder="Ulangi password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width:100%">
+                        <i class="ri-user-add-line"></i> Daftar
+                    </button>
+                </form>
+            </div>
+            <div class="modal-footer" style="justify-content:center; border-top:none; background:transparent;">
+                <span class="text-muted">Sudah punya akun?</span>
+                <a href="#" onclick="closeModal('registerModal'); return false;" style="margin-left:4px">
+                    Login di sini
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== APP LAYOUT ==================== -->
+    <div id="appLayout" class="app-layout hidden">
+        <!-- Sidebar Overlay (Mobile) -->
+        <div class="sidebar-overlay"></div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="sidebar-brand-icon">
+                    <img src="img/logo.png" alt="Logo" style="height: 32px; width: auto; object-fit: contain;">
+                </div>
+                <div class="sidebar-brand-text" style="display: flex; flex-direction: column; line-height: 1.1;">
+                    <span>rentalinCo</span>
+                    <span style="font-size: 0.55em; opacity: 0.6; font-weight: 400; letter-spacing: 0.5px;">by
+                        rakaRent</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="sidebar-nav-section">
+                    <div class="sidebar-nav-title">Menu Utama</div>
+                    <div class="sidebar-nav-item active" data-page="dashboard" onclick="navigateTo('dashboard')">
+                        <i class="ri-dashboard-line"></i>
+                        <span>Dashboard</span>
+                    </div>
+                </div>
+
+                <div class="sidebar-nav-section">
+                    <div class="sidebar-nav-title">Master Data</div>
+                    <div class="sidebar-nav-item" data-page="kendaraan" onclick="navigateTo('kendaraan')">
+                        <i class="ri-car-line"></i>
+                        <span>Kendaraan</span>
+                    </div>
+                    <div class="sidebar-nav-item" data-page="pelanggan" onclick="navigateTo('pelanggan')">
+                        <i class="ri-user-3-line"></i>
+                        <span>Pelanggan</span>
+                    </div>
+                </div>
+
+                <div class="sidebar-nav-section">
+                    <div class="sidebar-nav-title">Transaksi</div>
+                    <div class="sidebar-nav-item" data-page="transaksi" onclick="navigateTo('transaksi')">
+                        <i class="ri-file-list-3-line"></i>
+                        <span>Penyewaan</span>
+                    </div>
+                    <div class="sidebar-nav-item" data-page="denda" onclick="navigateTo('denda')">
+                        <i class="ri-money-dollar-circle-line"></i>
+                        <span>Denda</span>
+                    </div>
+                </div>
+
+                <div class="sidebar-nav-section">
+                    <div class="sidebar-nav-title">Laporan</div>
+                    <div class="sidebar-nav-item" data-page="laporan" onclick="navigateTo('laporan')">
+                        <i class="ri-file-chart-line"></i>
+                        <span>Laporan Transaksi</span>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="sidebar-user">
+                    <div class="sidebar-user-avatar" id="userAvatar">A</div>
+                    <div class="sidebar-user-info">
+                        <div class="sidebar-user-name" id="userName">Admin</div>
+                        <div class="sidebar-user-role">Administrator</div>
+                    </div>
+                    <button class="btn btn-ghost btn-icon btn-sm" onclick="logout()" title="Logout">
+                        <i class="ri-logout-box-r-line"></i>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="header-btn mobile-menu-btn" onclick="toggleSidebar()">
+                        <i class="ri-menu-line"></i>
+                    </button>
+                    <h2 class="header-title" id="headerTitle">Dashboard</h2>
+                </div>
+                <div class="header-right">
+                    <button class="header-btn" onclick="loadPageData(state.currentPage)" title="Refresh">
+                        <i class="ri-refresh-line"></i>
+                    </button>
+                    <button class="header-btn" onclick="logout()" title="Logout">
+                        <i class="ri-logout-box-r-line"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- ==================== DASHBOARD PAGE ==================== -->
+                <div id="page-dashboard" class="page">
+                    <!-- Warnings -->
+                    <div id="lateWarning" class="alert alert-danger hidden">
+                        <i class="alert-icon ri-error-warning-line"></i>
+                        <div class="alert-content">
+                            <div class="alert-title">Kendaraan Terlambat!</div>
+                            <p class="alert-message"></p>
+                        </div>
+                    </div>
+
+                    <div id="fineWarning" class="alert alert-warning hidden">
+                        <i class="alert-icon ri-money-dollar-circle-line"></i>
+                        <div class="alert-content">
+                            <div class="alert-title">Denda Belum Dibayar</div>
+                            <p class="alert-message"></p>
+                        </div>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-4 mb-8">
+                        <div class="stat-card">
+                            <div class="stat-icon primary">
+                                <i class="ri-car-line"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-title">Total Kendaraan</div>
+                                <div class="stat-value" id="statKendaraan">0</div>
+                                <div class="stat-subtitle">Unit tersedia</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon success">
+                                <i class="ri-user-3-line"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-title">Pelanggan</div>
+                                <div class="stat-value" id="statPelanggan">0</div>
+                                <div class="stat-subtitle">Terdaftar</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon warning">
+                                <i class="ri-file-list-3-line"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-title">Sedang Disewa</div>
+                                <div class="stat-value" id="statTransaksi">0</div>
+                                <div class="stat-subtitle">Transaksi aktif</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon info">
+                                <i class="ri-money-dollar-circle-line"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-title">Pendapatan</div>
+                                <div class="stat-value" id="statPendapatan" style="font-size:1.25rem">Rp 0</div>
+                                <div class="stat-subtitle">Bulan ini</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Transactions -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Transaksi Terbaru</h3>
+                            <button class="btn btn-primary btn-sm" onclick="navigateTo('transaksi')">
+                                Lihat Semua <i class="ri-arrow-right-line"></i>
+                            </button>
+                        </div>
+                        <div class="card-body" style="padding:0">
+                            <div class="table-container">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Kode</th>
+                                            <th>Pelanggan</th>
+                                            <th>Kendaraan</th>
+                                            <th>Tanggal</th>
+                                            <th>Total</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recentTransactions">
+                                        <tr>
+                                            <td colspan="6" class="text-center text-muted">Memuat data...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== KENDARAAN PAGE ==================== -->
+                <div id="page-kendaraan" class="page hidden">
+                    <div class="page-header">
+                        <h1 class="page-title">Master Kendaraan</h1>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" onclick="openKendaraanForm()">
+                                <i class="ri-add-line"></i> Tambah Kendaraan
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="search-filters">
+                        <div class="search-box">
+                            <i class="ri-search-line"></i>
+                            <input type="text" class="form-control" id="searchKendaraan" placeholder="Cari kendaraan..."
+                                onkeyup="loadKendaraan()">
+                        </div>
+                        <div class="filter-group">
+                            <select class="form-control" id="filterJenis" onchange="loadKendaraan()" style="width:auto">
+                                <option value="">Semua Jenis</option>
+                                <option value="Mobil">Mobil</option>
+                                <option value="Motor">Motor</option>
+                                <option value="Sepeda">Sepeda</option>
+                                <option value="Truk">Truk</option>
+                                <option value="Bus">Bus</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Vehicle Grid -->
+                    <div class="grid grid-cols-3" id="kendaraanGrid">
+                        <div class="loading" style="grid-column:1/-1">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+
+                    <div id="kendaraanPagination"></div>
+                </div>
+
+                <!-- ==================== PELANGGAN PAGE ==================== -->
+                <div id="page-pelanggan" class="page hidden">
+                    <div class="page-header">
+                        <h1 class="page-title">Master Pelanggan</h1>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" onclick="openPelangganForm()">
+                                <i class="ri-add-line"></i> Tambah Pelanggan
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Search -->
+                    <div class="search-filters">
+                        <div class="search-box">
+                            <i class="ri-search-line"></i>
+                            <input type="text" class="form-control" id="searchPelanggan" placeholder="Cari pelanggan..."
+                                onkeyup="loadPelanggan()">
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="card">
+                        <div class="card-body" style="padding:0">
+                            <div class="table-container">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama / NIK</th>
+                                            <th>Jenis Kelamin</th>
+                                            <th>No. Telepon</th>
+                                            <th>Email</th>
+                                            <th>No. SIM</th>
+                                            <th>Alamat</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pelangganTable">
+                                        <tr>
+                                            <td colspan="7" class="text-center text-muted">Memuat data...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="pelangganPagination"></div>
+                </div>
+
+                <!-- ==================== TRANSAKSI PAGE ==================== -->
+                <div id="page-transaksi" class="page hidden">
+                    <div class="page-header">
+                        <h1 class="page-title">Transaksi Penyewaan</h1>
+                        <div class="page-actions">
+                            <button class="btn btn-primary" onclick="openSewaForm()">
+                                <i class="ri-add-line"></i> Sewa Baru
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Active Transactions -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Kendaraan Sedang Disewa</h3>
+                        </div>
+                        <div class="card-body" style="padding:0">
+                            <div class="table-container">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Kode</th>
+                                            <th>Pelanggan</th>
+                                            <th>Kendaraan</th>
+                                            <th>Tgl Sewa</th>
+                                            <th>Tgl Kembali</th>
+                                            <th>Status</th>
+                                            <th>Total</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="transaksiTable">
+                                        <tr>
+                                            <td colspan="8" class="text-center text-muted">Memuat data...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== PEMESANAN ONLINE PAGE ==================== -->
+                <div id="page-pemesanan" class="page hidden">
+                    <div class="page-header">
+                        <h1 class="page-title">Pemesanan Online</h1>
+                        <div class="page-actions">
+                            <button class="btn btn-secondary" onclick="loadPemesanan()">
+                                <i class="ri-refresh-line"></i> Refresh
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Info Alert -->
+                    <div class="alert alert-info mb-6">
+                        <i class="alert-icon ri-information-line"></i>
+                        <div class="alert-content">
+                            <div class="alert-title">Pemesanan dari Pelanggan Online</div>
+                            <p class="alert-message">Daftar pemesanan yang masuk dari website pelanggan. Setujui atau
+                                tolak pemesanan di bawah ini.</p>
+                        </div>
+                    </div>
+
+                    <!-- Pending Orders Table -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Menunggu Konfirmasi</h3>
+                        </div>
+                        <div class="card-body" style="padding:0">
+                            <div class="table-container">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Kode</th>
+                                            <th>Pelanggan</th>
+                                            <th>Kendaraan</th>
+                                            <th>Tgl Sewa</th>
+                                            <th>Tgl Kembali</th>
+                                            <th>Total</th>
+                                            <th>Waktu Order</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pemesananTable">
+                                        <tr>
+                                            <td colspan="8" class="text-center text-muted">Memuat data...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== DENDA PAGE ==================== -->
+                <div id="page-denda" class="page hidden">
+                    <div class="page-header">
+                        <h1 class="page-title">Pengelolaan Denda</h1>
+                    </div>
+
+                    <!-- Filter -->
+                    <div class="search-filters">
+                        <div class="filter-group">
+                            <select class="form-control" id="filterDendaStatus" onchange="loadDenda()"
+                                style="width:auto">
+                                <option value="">Semua Status</option>
+                                <option value="Belum Dibayar">Belum Dibayar</option>
+                                <option value="Lunas">Lunas</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="card">
+                        <div class="card-body" style="padding:0">
+                            <div class="table-container">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Kode Transaksi</th>
+                                            <th>Pelanggan</th>
+                                            <th>Kendaraan</th>
+                                            <th>Hari Terlambat</th>
+                                            <th>Total Denda</th>
+                                            <th>Status</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="dendaTable">
+                                        <tr>
+                                            <td colspan="7" class="text-center text-muted">Memuat data...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="dendaPagination"></div>
+                </div>
+
+                <!-- ==================== LAPORAN PAGE ==================== -->
+                <div id="page-laporan" class="page hidden">
+                    <div class="page-header">
+                        <h1 class="page-title">Laporan Transaksi</h1>
+                        <div class="page-actions">
+                            <button class="btn btn-secondary" onclick="printLaporan()">
+                                <i class="ri-printer-line"></i> Cetak
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Date Filter -->
+                    <div class="card mb-6">
+                        <div class="card-body">
+                            <div class="form-row">
+                                <div class="form-group mb-0">
+                                    <label class="form-label">Dari Tanggal</label>
+                                    <input type="date" class="form-control" id="laporanDari">
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label class="form-label">Sampai Tanggal</label>
+                                    <input type="date" class="form-control" id="laporanSampai">
+                                </div>
+                                <div class="form-group mb-0" style="align-self:flex-end">
+                                    <button class="btn btn-primary" onclick="loadLaporan()">
+                                        <i class="ri-filter-line"></i> Filter
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary -->
+                    <div class="grid grid-cols-3 mb-6">
+                        <div class="stat-card">
+                            <div class="stat-icon primary">
+                                <i class="ri-file-list-line"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-title">Total Transaksi</div>
+                                <div class="stat-value" id="laporanTotalTransaksi">0</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon success">
+                                <i class="ri-money-dollar-circle-line"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-title">Total Pendapatan</div>
+                                <div class="stat-value" id="laporanPendapatan" style="font-size:1.25rem">Rp 0</div>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon warning">
+                                <i class="ri-alert-line"></i>
+                            </div>
+                            <div class="stat-content">
+                                <div class="stat-title">Total Denda</div>
+                                <div class="stat-value" id="laporanTotalDenda" style="font-size:1.25rem">Rp 0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Riwayat Transaksi</h3>
+                        </div>
+                        <div class="card-body" style="padding:0">
+                            <div class="table-container">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Kode</th>
+                                            <th>Pelanggan</th>
+                                            <th>Kendaraan</th>
+                                            <th>Tgl Sewa</th>
+                                            <th>Tgl Kembali</th>
+                                            <th>Total</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="laporanTable">
+                                        <tr>
+                                            <td colspan="7" class="text-center text-muted">Pilih periode laporan</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="footer-content">
+                    <p class="footer-text">&copy; 2026 rentalinCo by rakaRent - Vehicle Rental Management System</p>
+                    <p class="footer-developer"></p>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- ==================== MODALS ==================== -->
+
+    <!-- Kendaraan Modal -->
+    <div id="kendaraanModal" class="modal-overlay">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title" id="kendaraanModalTitle">Tambah Kendaraan</h3>
+                <button class="modal-close" onclick="closeModal('kendaraanModal')">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <form id="kendaraanForm" onsubmit="saveKendaraan(event)">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Nama Kendaraan</label>
+                            <input type="text" class="form-control" name="nama" required
+                                placeholder="Contoh: Avanza Veloz">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Jenis</label>
+                            <select class="form-control" name="jenis" required>
+                                <option value="">Pilih Jenis</option>
+                                <option value="Mobil">Mobil</option>
+                                <option value="Motor">Motor</option>
+                                <option value="Sepeda">Sepeda</option>
+                                <option value="Truk">Truk</option>
+                                <option value="Bus">Bus</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Merk</label>
+                            <input type="text" class="form-control" name="merk" required placeholder="Contoh: Toyota">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Tahun</label>
+                            <input type="number" class="form-control" name="tahun" required min="1990" max="2030"
+                                placeholder="2023">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Plat Nomor</label>
+                            <input type="text" class="form-control" name="plat_nomor" required
+                                placeholder="Contoh: B 1234 ABC">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Warna</label>
+                            <input type="text" class="form-control" name="warna" placeholder="Contoh: Putih">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Harga Sewa / Hari (Rp)</label>
+                            <input type="number" class="form-control" name="harga_sewa_per_hari" required min="0"
+                                placeholder="450000">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Stok</label>
+                            <input type="number" class="form-control" name="stok" required min="1" value="1">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">URL Gambar</label>
+                        <input type="url" class="form-control" name="gambar_url"
+                            placeholder="https://example.com/image.jpg">
+                        <small class="text-muted">Masukkan URL gambar dari internet (contoh: Unsplash, Pexels,
+                            dll)</small>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Deskripsi</label>
+                        <textarea class="form-control" name="deskripsi" rows="3"
+                            placeholder="Deskripsi singkat kendaraan"></textarea>
+                    </div>
+                    <div class="form-group mb-0">
+                        <label class="form-label">Status</label>
+                        <select class="form-control" name="status">
+                            <option value="Tersedia">Tersedia</option>
+                            <option value="Tidak Tersedia">Tidak Tersedia</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                        onclick="closeModal('kendaraanModal')">Batal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ri-save-line"></i> Simpan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Pelanggan Modal -->
+    <div id="pelangganModal" class="modal-overlay">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title" id="pelangganModalTitle">Tambah Pelanggan</h3>
+                <button class="modal-close" onclick="closeModal('pelangganModal')">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <form id="pelangganForm" onsubmit="savePelanggan(event)">
+                <div class="modal-body">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Nama Lengkap</label>
+                            <input type="text" class="form-control" name="nama" required
+                                placeholder="Nama lengkap pelanggan">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">NIK (16 digit)</label>
+                            <input type="text" class="form-control" name="nik" required maxlength="16"
+                                pattern="[0-9]{16}" placeholder="Nomor Induk Kependudukan">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Jenis Kelamin</label>
+                            <select class="form-control" name="jenis_kelamin" required>
+                                <option value="">Pilih</option>
+                                <option value="Laki-laki">Laki-laki</option>
+                                <option value="Perempuan">Perempuan</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Tanggal Lahir</label>
+                            <input type="date" class="form-control" name="tanggal_lahir">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">No. Telepon</label>
+                            <input type="tel" class="form-control" name="no_telepon" required
+                                placeholder="08xxxxxxxxxx">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" name="email" placeholder="email@example.com">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">No. SIM</label>
+                        <input type="text" class="form-control" name="no_sim" placeholder="Nomor SIM (jika ada)">
+                    </div>
+                    <div class="form-group mb-0">
+                        <label class="form-label">Alamat</label>
+                        <textarea class="form-control" name="alamat" rows="3" placeholder="Alamat lengkap"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                        onclick="closeModal('pelangganModal')">Batal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ri-save-line"></i> Simpan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sewa Modal -->
+    <div id="sewaModal" class="modal-overlay">
+        <div class="modal modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title">Transaksi Penyewaan Baru</h3>
+                <button class="modal-close" onclick="closeModal('sewaModal')">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <form id="sewaForm" onsubmit="submitSewa(event)">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label required">Pelanggan</label>
+                        <select class="form-control" name="pelanggan_id" id="sewaPelanggan" required>
+                            <option value="">Pilih Pelanggan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label required">Kendaraan</label>
+                        <select class="form-control" name="kendaraan_id" id="sewaKendaraan" required
+                            onchange="updateSewaPreview()">
+                            <option value="">Pilih Kendaraan</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label required">Tanggal Sewa</label>
+                            <input type="date" class="form-control" name="tanggal_sewa" id="sewaTanggalSewa" required
+                                onchange="updateSewaPreview()">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label required">Tanggal Kembali</label>
+                            <input type="date" class="form-control" name="tanggal_kembali" id="sewaTanggalKembali"
+                                required onchange="updateSewaPreview()">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Catatan</label>
+                        <textarea class="form-control" name="catatan" rows="2"
+                            placeholder="Catatan tambahan (opsional)"></textarea>
+                    </div>
+
+                    <!-- Preview -->
+                    <div id="sewaPreview" class="hidden">
+                        <div class="card" style="background:var(--primary-50);border-color:var(--primary-200)">
+                            <div class="card-body">
+                                <h4 class="font-semibold mb-4">Ringkasan Biaya</h4>
+                                <div class="flex justify-between mb-2">
+                                    <span>Durasi Sewa:</span>
+                                    <strong id="previewHari">-</strong>
+                                </div>
+                                <div class="flex justify-between mb-2">
+                                    <span>Harga per Hari:</span>
+                                    <span id="previewHarga">-</span>
+                                </div>
+                                <hr style="margin:12px 0;border-color:var(--primary-200)">
+                                <div class="flex justify-between">
+                                    <strong>Total Biaya:</strong>
+                                    <strong class="text-primary" style="font-size:1.25rem" id="previewTotal">-</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('sewaModal')">Batal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="ri-check-line"></i> Proses Penyewaan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Kembalikan Modal -->
+    <div id="kembalikanModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Proses Pengembalian</h3>
+                <button class="modal-close" onclick="closeModal('kembalikanModal')">
+                    <i class="ri-close-line"></i>
+                </button>
+            </div>
+            <form onsubmit="submitKembalikan(event)">
+                <div class="modal-body">
+                    <input type="hidden" id="kembalikanTransaksiId">
+
+                    <div class="alert alert-info">
+                        <i class="alert-icon ri-information-line"></i>
+                        <div class="alert-content">
+                            <div class="alert-title">Kode Transaksi</div>
+                            <p class="alert-message" id="kembalikanKode">-</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label required">Tanggal Pengembalian</label>
+                        <input type="date" class="form-control" id="kembalikanTanggal" required>
+                    </div>
+
+                    <div id="kembalikanResult"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary"
+                        onclick="closeModal('kembalikanModal')">Batal</button>
+                    <button type="submit" class="btn btn-success">
+                        <i class="ri-arrow-go-back-line"></i> Proses Pengembalian
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="assets/js/script.js"></script>
+
+    <!-- Inline functions for approve/reject (backup) -->
+    <script>
+        function approveTransaksi(id) {
+            console.log('approveTransaksi:', id);
+            if (!confirm('Setujui pemesanan ini?')) return;
+
+            fetch('backend/transaksi.php?action=approve', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ transaksi_id: id })
+            })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    console.log('Result:', data);
+                    alert(data.message || 'Selesai');
+                    if (data.success) location.reload();
+                })
+                .catch(function (e) {
+                    console.error(e);
+                    alert('Error: ' + e.message);
+                });
+        }
+
+        function rejectTransaksi(id) {
+            console.log('rejectTransaksi:', id);
+            var alasan = prompt('Alasan penolakan:');
+            if (alasan === null) return;
+
+            fetch('backend/transaksi.php?action=reject', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ transaksi_id: id, alasan: alasan || 'Ditolak' })
+            })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    console.log('Result:', data);
+                    alert(data.message || 'Selesai');
+                    if (data.success) location.reload();
+                })
+                .catch(function (e) {
+                    console.error(e);
+                    alert('Error: ' + e.message);
+                });
+        }
+    </script>
+</body>
+
+</html>

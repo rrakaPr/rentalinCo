@@ -1,0 +1,469 @@
+================================================================================
+SEQUENCE DIAGRAM - VHRENT VEHICLE RENTAL SYSTEM
+PlantUML Code - Copy ke https://www.plantuml.com/plantuml/uml
+================================================================================
+
+
+================================================================================
+1. SEQUENCE DIAGRAM - LOGIN
+================================================================================
+@startuml SD_Login
+title Sequence Diagram - Login
+
+actor User
+participant "Halaman Login" as UI
+participant "auth.php" as API
+database "Database" as DB
+
+User -> UI : Buka halaman login
+User -> UI : Input username & password
+User -> UI : Klik Login
+UI -> API : POST /auth.php?action=login
+API -> API : Validasi input
+API -> DB : SELECT * FROM admins/pelanggan
+DB --> API : Data user
+API -> API : password_verify()
+alt Password Cocok
+    API -> API : Buat session
+    API --> UI : {success: true}
+    UI --> User : Redirect ke Dashboard
+else Password Salah
+    API --> UI : {success: false, message: "Password salah"}
+    UI --> User : Tampilkan error
+end
+
+@enduml
+
+
+================================================================================
+2. SEQUENCE DIAGRAM - REGISTRASI
+================================================================================
+@startuml SD_Registrasi
+title Sequence Diagram - Registrasi
+
+actor User
+participant "Form Registrasi" as UI
+participant "auth.php" as API
+database "Database" as DB
+
+User -> UI : Isi form registrasi
+User -> UI : Klik Daftar
+UI -> API : POST /auth.php?action=register
+API -> API : Validasi format data
+API -> DB : SELECT * FROM users WHERE email=?
+DB --> API : Hasil cek
+alt Email Sudah Ada
+    API --> UI : {success: false, message: "Email sudah terdaftar"}
+    UI --> User : Tampilkan error
+else Email Belum Ada
+    API -> API : password_hash()
+    API -> DB : INSERT INTO users
+    DB --> API : Success
+    API --> UI : {success: true}
+    UI --> User : Redirect ke Login
+end
+
+@enduml
+
+
+================================================================================
+3. SEQUENCE DIAGRAM - LUPA PASSWORD
+================================================================================
+@startuml SD_LupaPassword
+title Sequence Diagram - Lupa Password
+
+actor User
+participant "Form Reset" as UI
+participant "auth.php" as API
+database "Database" as DB
+
+User -> UI : Input username
+UI -> API : POST /auth.php?action=forgot-password
+API -> DB : SELECT nim FROM admins WHERE username=?
+DB --> API : Data NIM
+API --> UI : {hint: "NIM: 123***789"}
+UI --> User : Tampilkan hint
+
+User -> UI : Input NIM & password baru
+UI -> API : POST /auth.php?action=reset-password
+API -> DB : SELECT * WHERE username=? AND nim=?
+DB --> API : Data user
+alt NIM Cocok
+    API -> API : password_hash()
+    API -> DB : UPDATE admins SET password=?
+    DB --> API : Success
+    API --> UI : {success: true}
+    UI --> User : Redirect ke Login
+else NIM Tidak Cocok
+    API --> UI : {success: false}
+    UI --> User : Tampilkan error
+end
+
+@enduml
+
+
+================================================================================
+4. SEQUENCE DIAGRAM - KELOLA KENDARAAN
+================================================================================
+@startuml SD_KelolaKendaraan
+title Sequence Diagram - Kelola Kendaraan (CRUD)
+
+actor Admin
+participant "Dashboard" as UI
+participant "kendaraan.php" as API
+database "Database" as DB
+
+== Lihat Daftar ==
+Admin -> UI : Buka menu Kendaraan
+UI -> API : GET /kendaraan.php
+API -> DB : SELECT * FROM kendaraan
+DB --> API : Data kendaraan
+API --> UI : JSON data
+UI --> Admin : Tampilkan tabel
+
+== Tambah Kendaraan ==
+Admin -> UI : Klik Tambah
+Admin -> UI : Isi form kendaraan
+Admin -> UI : Klik Simpan
+UI -> API : POST /kendaraan.php
+API -> API : Validasi data
+API -> DB : INSERT INTO kendaraan
+DB --> API : Success
+API --> UI : {success: true}
+UI --> Admin : Refresh tabel
+
+== Edit Kendaraan ==
+Admin -> UI : Klik Edit
+UI -> API : GET /kendaraan.php?id=1
+API -> DB : SELECT * WHERE id=1
+DB --> API : Data kendaraan
+API --> UI : JSON data
+UI --> Admin : Tampilkan form dengan data
+Admin -> UI : Edit & Simpan
+UI -> API : PUT /kendaraan.php
+API -> DB : UPDATE kendaraan SET ... WHERE id=1
+DB --> API : Success
+API --> UI : {success: true}
+
+== Hapus Kendaraan ==
+Admin -> UI : Klik Hapus
+UI --> Admin : Konfirmasi hapus?
+Admin -> UI : Konfirmasi Ya
+UI -> API : DELETE /kendaraan.php?id=1
+API -> DB : DELETE FROM kendaraan WHERE id=1
+DB --> API : Success
+API --> UI : {success: true}
+UI --> Admin : Refresh tabel
+
+@enduml
+
+
+================================================================================
+5. SEQUENCE DIAGRAM - KELOLA PELANGGAN
+================================================================================
+@startuml SD_KelolaPelanggan
+title Sequence Diagram - Kelola Pelanggan (CRUD)
+
+actor Admin
+participant "Dashboard" as UI
+participant "pelanggan.php" as API
+database "Database" as DB
+
+== Lihat Daftar ==
+Admin -> UI : Buka menu Pelanggan
+UI -> API : GET /pelanggan.php
+API -> DB : SELECT * FROM pelanggan
+DB --> API : Data pelanggan
+API --> UI : JSON data
+UI --> Admin : Tampilkan tabel
+
+== Tambah Pelanggan ==
+Admin -> UI : Isi form pelanggan
+UI -> API : POST /pelanggan.php
+API -> DB : SELECT * WHERE nik=?
+alt NIK Sudah Ada
+    API --> UI : {success: false}
+else NIK Unik
+    API -> DB : INSERT INTO pelanggan
+    DB --> API : Success
+    API --> UI : {success: true}
+end
+
+== Edit/Hapus ==
+Admin -> UI : Pilih aksi
+UI -> API : PUT/DELETE /pelanggan.php
+API -> DB : UPDATE/DELETE pelanggan
+DB --> API : Success
+API --> UI : {success: true}
+
+@enduml
+
+
+================================================================================
+6. SEQUENCE DIAGRAM - BUAT TRANSAKSI SEWA
+================================================================================
+@startuml SD_BuatTransaksi
+title Sequence Diagram - Buat Transaksi Sewa
+
+actor Admin
+participant "Form Transaksi" as UI
+participant "transaksi.php" as API
+database "Database" as DB
+
+Admin -> UI : Buka form transaksi
+Admin -> UI : Pilih pelanggan
+Admin -> UI : Pilih kendaraan
+UI -> API : GET /kendaraan.php?id=1
+API -> DB : SELECT * FROM kendaraan WHERE id=1
+DB --> API : Data kendaraan + stok
+API --> UI : JSON data
+
+alt Stok Tersedia
+    Admin -> UI : Input tanggal sewa & kembali
+    UI -> UI : Hitung total biaya
+    UI --> Admin : Tampilkan rincian biaya
+    Admin -> UI : Klik Simpan
+    UI -> API : POST /transaksi.php
+    API -> API : Generate kode transaksi
+    API -> DB : INSERT INTO transaksi
+    DB --> API : Success
+    API -> DB : UPDATE kendaraan SET stok_tersedia = stok_tersedia - 1
+    DB --> API : Success
+    API --> UI : {success: true, kode: "TRX..."}
+    UI --> Admin : Tampilkan sukses & invoice
+else Stok Habis
+    UI --> Admin : Tampilkan error "Stok tidak tersedia"
+end
+
+@enduml
+
+
+================================================================================
+7. SEQUENCE DIAGRAM - PROSES PENGEMBALIAN
+================================================================================
+@startuml SD_ProsesPengembalian
+title Sequence Diagram - Proses Pengembalian
+
+actor Admin
+participant "Dashboard" as UI
+participant "transaksi.php" as API
+database "Database" as DB
+
+Admin -> UI : Pilih transaksi aktif
+Admin -> UI : Klik Proses Kembali
+Admin -> UI : Input tanggal kembali aktual
+UI -> API : PUT /transaksi.php?action=return
+API -> DB : SELECT * FROM transaksi WHERE id=?
+DB --> API : Data transaksi
+API -> API : Hitung selisih hari
+
+alt Terlambat
+    API -> API : Hitung denda (10% x hari x harga)
+    API -> DB : INSERT INTO denda
+    DB --> API : Success
+    API -> DB : UPDATE transaksi SET status='Terlambat'
+else Tepat Waktu
+    API -> DB : UPDATE transaksi SET status='Dikembalikan'
+end
+
+API -> DB : UPDATE kendaraan SET stok_tersedia = stok_tersedia + 1
+DB --> API : Success
+API --> UI : {success: true, denda: ...}
+UI --> Admin : Tampilkan hasil
+
+@enduml
+
+
+================================================================================
+8. SEQUENCE DIAGRAM - KELOLA DENDA
+================================================================================
+@startuml SD_KelolaDenda
+title Sequence Diagram - Kelola Denda
+
+actor Admin
+participant "Dashboard" as UI
+participant "denda.php" as API
+database "Database" as DB
+
+Admin -> UI : Buka menu Denda
+UI -> API : GET /denda.php
+API -> DB : SELECT d.*, t.* FROM denda d JOIN transaksi t
+DB --> API : Data denda
+API --> UI : JSON data
+UI --> Admin : Tampilkan daftar denda
+
+Admin -> UI : Pilih denda
+Admin -> UI : Klik Bayar
+UI -> API : PUT /denda.php?action=pay
+API -> DB : UPDATE denda SET status='Lunas', tanggal_bayar=NOW()
+DB --> API : Success
+API --> UI : {success: true}
+UI --> Admin : Refresh daftar
+
+@enduml
+
+
+================================================================================
+9. SEQUENCE DIAGRAM - LIHAT LAPORAN
+================================================================================
+@startuml SD_LihatLaporan
+title Sequence Diagram - Lihat Laporan
+
+actor Admin
+participant "Dashboard" as UI
+participant "laporan.php" as API
+database "Database" as DB
+
+Admin -> UI : Buka menu Laporan
+UI -> API : GET /laporan.php?action=dashboard
+API -> DB : SELECT COUNT(*) FROM transaksi
+API -> DB : SELECT SUM(total_biaya) FROM transaksi
+API -> DB : SELECT kendaraan populer
+DB --> API : Data statistik
+API --> UI : JSON dashboard data
+UI --> Admin : Tampilkan dashboard
+
+Admin -> UI : Filter tanggal
+Admin -> UI : Pilih jenis laporan
+UI -> API : GET /laporan.php?action=report&start=...&end=...
+API -> DB : Query sesuai filter
+DB --> API : Data laporan
+API --> UI : JSON data
+UI --> Admin : Tampilkan laporan
+
+@enduml
+
+
+================================================================================
+10. SEQUENCE DIAGRAM - LIHAT KATALOG (PELANGGAN)
+================================================================================
+@startuml SD_LihatKatalog
+title Sequence Diagram - Lihat Katalog
+
+actor Pelanggan
+participant "Website" as UI
+participant "kendaraan.php" as API
+database "Database" as DB
+
+Pelanggan -> UI : Buka website
+UI -> API : GET /kendaraan.php?limit=100
+API -> DB : SELECT * FROM kendaraan WHERE status='Tersedia'
+DB --> API : Data kendaraan
+API --> UI : JSON data
+UI --> Pelanggan : Tampilkan katalog
+
+Pelanggan -> UI : Filter jenis kendaraan
+UI -> UI : Filter data lokal
+UI --> Pelanggan : Tampilkan hasil filter
+
+Pelanggan -> UI : Klik kendaraan
+UI --> Pelanggan : Tampilkan detail kendaraan
+
+@enduml
+
+
+================================================================================
+11. SEQUENCE DIAGRAM - BOOKING KENDARAAN
+================================================================================
+@startuml SD_BookingKendaraan
+title Sequence Diagram - Booking Kendaraan
+
+actor Pelanggan
+participant "Website" as UI
+participant "auth.php" as AuthAPI
+participant "pemesanan.php" as API
+database "Database" as DB
+
+Pelanggan -> UI : Klik Booking
+UI -> AuthAPI : GET /auth.php?action=customer-check
+AuthAPI --> UI : Session status
+
+alt Belum Login
+    UI --> Pelanggan : Redirect ke Login
+    Pelanggan -> UI : Login
+end
+
+UI --> Pelanggan : Tampilkan form booking
+Pelanggan -> UI : Input tanggal sewa
+Pelanggan -> UI : Klik Konfirmasi
+UI -> API : POST /pemesanan.php?action=create
+API -> DB : SELECT stok_tersedia FROM kendaraan
+alt Stok Ada
+    API -> API : Generate kode booking
+    API -> DB : INSERT INTO transaksi
+    DB --> API : Success
+    API --> UI : {success: true, invoice: {...}}
+    UI --> Pelanggan : Tampilkan invoice
+else Stok Habis
+    API --> UI : {success: false}
+    UI --> Pelanggan : Tampilkan error
+end
+
+@enduml
+
+
+================================================================================
+12. SEQUENCE DIAGRAM - LIHAT INVOICE
+================================================================================
+@startuml SD_LihatInvoice
+title Sequence Diagram - Lihat Invoice
+
+actor Pelanggan
+participant "Website" as UI
+
+Pelanggan -> UI : Booking berhasil
+UI -> UI : Generate invoice HTML
+UI --> Pelanggan : Tampilkan invoice
+
+note right of UI
+  Invoice berisi:
+  - Kode Transaksi
+  - Data Pelanggan
+  - Data Kendaraan
+  - Tanggal Sewa
+  - Total Biaya
+end note
+
+Pelanggan -> UI : Klik Cetak
+UI -> UI : window.print()
+UI --> Pelanggan : Dialog print browser
+
+@enduml
+
+
+================================================================================
+13. SEQUENCE DIAGRAM - HUBUNGI WHATSAPP
+================================================================================
+@startuml SD_HubungiWhatsApp
+title Sequence Diagram - Hubungi WhatsApp
+
+actor Pelanggan
+participant "Website" as UI
+participant "WhatsApp" as WA
+actor Admin
+
+Pelanggan -> UI : Klik tombol WhatsApp
+UI -> UI : Generate pesan otomatis
+note right of UI
+  Pesan:
+  "Halo, saya ingin konfirmasi booking:
+  Kode: TRX20260110...
+  Kendaraan: Avanza Veloz
+  Tanggal: 10-12 Jan 2026
+  Total: Rp 900.000"
+end note
+
+UI -> WA : window.open(wa.me/...)
+WA --> Pelanggan : Buka WhatsApp
+Pelanggan -> WA : Kirim pesan
+WA -> Admin : Terima pesan
+Admin -> WA : Balas konfirmasi
+WA -> Pelanggan : Terima konfirmasi
+Pelanggan -> Admin : Proses pembayaran
+
+@enduml
+
+
+================================================================================
+END OF SEQUENCE DIAGRAMS
+================================================================================

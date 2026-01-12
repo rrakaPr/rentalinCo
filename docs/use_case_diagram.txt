@@ -1,0 +1,70 @@
+@startuml VHRent_Use_Case_Diagram
+
+title Use Case Diagram - VHRent (Vehicle Rental Management System)
+
+left to right direction
+skinparam actorStyle awesome
+skinparam usecase {
+    BackgroundColor #ecf0f1
+    BorderColor #2c3e50
+}
+
+' =====================================================
+' ACTORS
+' =====================================================
+actor "Admin" as Admin #3498db
+actor "Pelanggan" as Customer #27ae60
+
+' =====================================================
+' SYSTEM BOUNDARY
+' =====================================================
+rectangle "VHRent - Sistem Penyewaan Kendaraan" {
+    
+    ' === Admin Use Cases ===
+    usecase "Login" as UC_Login
+    usecase "Registrasi" as UC_Register
+    usecase "Lupa Password" as UC_ForgotPwd
+    usecase "Kelola Kendaraan" as UC_ManageVehicle
+    usecase "Kelola Pelanggan" as UC_ManageCustomer
+    usecase "Kelola Transaksi" as UC_ManageTransaction
+    usecase "Proses Pengembalian" as UC_ProcessReturn
+    usecase "Kelola Denda" as UC_ManagePenalty
+    usecase "Lihat Laporan" as UC_ViewReport
+    
+    ' === Customer Use Cases ===
+    usecase "Lihat Katalog" as UC_ViewCatalog
+    usecase "Booking Kendaraan" as UC_Booking
+    usecase "Lihat Invoice" as UC_ViewInvoice
+    usecase "Hubungi WhatsApp" as UC_WhatsApp
+}
+
+' =====================================================
+' ADMIN RELATIONSHIPS (Left Side)
+' =====================================================
+Admin --> UC_Login
+Admin --> UC_Register
+Admin --> UC_ForgotPwd
+Admin --> UC_ManageVehicle
+Admin --> UC_ManageCustomer
+Admin --> UC_ManageTransaction
+Admin --> UC_ProcessReturn
+Admin --> UC_ManagePenalty
+Admin --> UC_ViewReport
+
+' =====================================================
+' CUSTOMER RELATIONSHIPS (Right Side)
+' =====================================================
+UC_Login <-- Customer
+UC_Register <-- Customer
+UC_ViewCatalog <-- Customer
+UC_Booking <-- Customer
+UC_ViewInvoice <-- Customer
+UC_WhatsApp <-- Customer
+
+' =====================================================
+' INCLUDE & EXTEND
+' =====================================================
+UC_Booking ..> UC_ViewInvoice : <<include>>
+UC_ProcessReturn ..> UC_ManagePenalty : <<extend>>
+
+@enduml
