@@ -1,87 +1,42 @@
-# VHRent - Vehicle Rental Management System
+# rentalinCo - Vehicle Rental Management System
 
-Sistem manajemen penyewaan kendaraan berbasis web dengan PHP dan MySQL.
+**rentalinCo** adalah aplikasi manajemen penyewaan kendaraan berbasis web yang dirancang untuk memberikan solusi digital yang efisien, modern, dan mudah digunakan bagi bisnis rental.
 
-## 🚀 Deploy ke Railway
+Aplikasi ini menggabungkan keandalan backend PHP & MySQL dengan antarmuka pengguna (UI) yang estetis dan responsif, menjadikan proses pencatatan transaksi, pengelolaan armada, dan pemantauan pelanggan lebih terstruktur dan profesional.
 
-### Langkah 1: Persiapan
-1. Buat akun di [Railway.app](https://railway.app/)
-2. Install [Git](https://git-scm.com/) jika belum ada
-3. Login ke Railway menggunakan GitHub
+## 🌟 Tentang Proyek Ini
 
-### Langkah 2: Setup Database MySQL di Railway
-1. Di Railway Dashboard, klik **"New Project"**
-2. Pilih **"Provision MySQL"** 
-3. Setelah MySQL terbuat, klik service MySQL tersebut
-4. Pergi ke tab **"Variables"** dan catat nilai-nilai berikut:
-   - `MYSQLHOST`
-   - `MYSQLPORT`
-   - `MYSQLDATABASE`
-   - `MYSQLUSER`
-   - `MYSQLPASSWORD`
+Sistem ini dibuat untuk menjawab kebutuhan operasional bisnis rental kendaraan, meliputi:
+*   **Pencatatan Otomatis**: Menghindari kesalahan pencatatan manual.
+*   **Manajemen Aset**: Memantau ketersediaan dan status setiap unit kendaraan secara real-time.
+*   **Kalkulasi Akurat**: Perhitungan biaya sewa, durasi, dan denda keterlambatan secara otomatis.
+*   **Pengalaman Pengguna**: Desain antarmuka yang intuitif dengan sentuhan estetika modern (Glassmorphism & Smooth Animations).
 
-### Langkah 3: Import Database
-1. Di service MySQL, pergi ke tab **"Data"**
-2. Klik **"Connect"** untuk membuka koneksi
-3. Copy dan paste isi file `database/vhrent.sql` untuk membuat struktur tabel
+## 🚀 Fitur Unggulan
 
-### Langkah 4: Deploy Aplikasi PHP
-1. Di project yang sama, klik **"New"** → **"GitHub Repo"**
-2. Connect repository GitHub Anda yang berisi project ini
-3. Railway akan otomatis mendeteksi PHP dan melakukan deploy
-4. Pergi ke tab **"Variables"** di service PHP, tambahkan:
-   ```
-   MYSQL_HOST = [nilai dari MYSQLHOST]
-   MYSQL_PORT = [nilai dari MYSQLPORT]
-   MYSQL_DATABASE = [nilai dari MYSQLDATABASE]
-   MYSQL_USER = [nilai dari MYSQLUSER]
-   MYSQL_PASSWORD = [nilai dari MYSQLPASSWORD]
-   ```
+*   **Dashboard Informatif**: Ringkasan status armada dan transaksi aktif.
+*   **Sirkulasi Kendaraan**: Fitur Peminjaman (Rental) dan Pengembalian (Return) yang terintegrasi.
+*   **Manajemen Database**: CRUD (Create, Read, Update, Delete) untuk data Pelanggan dan Kendaraan.
+*   **Laporan Keuangan**: Rekapitulasi pendapatan dari transaksi yang selesai.
+*   **Keamanan**: Sistem login administrator untuk membatasi akses data sensitif.
 
-### Langkah 5: Generate Domain
-1. Pergi ke **Settings** → **Networking**
-2. Klik **"Generate Domain"**
-3. Aplikasi Anda akan tersedia di URL yang diberikan!
+## 🛠️ Teknologi yang Digunakan
 
-## 📁 Struktur Project
+*   **Backend**: PHP Native (Terstruktur & Efisien)
+*   **Database**: MySQL
+*   **Frontend**: HTML5, Modern CSS (Custom Design, No Framework dependencies), JavaScript
+*   **Desain**: Responsif & Premium UI
 
-```
-vhrent/
-├── backend/           # PHP API files
-│   ├── config.php     # Database configuration
-│   ├── auth.php       # Authentication API
-│   ├── kendaraan.php  # Vehicles API
-│   ├── pelanggan.php  # Customers API
-│   ├── transaksi.php  # Transactions API
-│   └── ...
-├── database/          # SQL files
-│   └── vhrent.sql     # Database schema
-├── assets/            # Static assets
-├── index.php          # Customer frontend
-├── index.html         # Admin frontend
-├── nixpacks.toml      # Railway config
-└── README.md
-```
+## 👨‍💻 Profil Pembuat
 
-## 💻 Development Lokal (XAMPP)
+Proyek ini dikembangkan dengan penuh dedikasi oleh:
 
-1. Clone project ke folder `htdocs` XAMPP
-2. Import `database/vhrent.sql` ke phpMyAdmin
-3. Akses via `http://localhost/vhrent`
+**[Nama Anda/RrakaPr]**
+*Full Stack Web Developer*
 
-## 🔐 Default Login Admin
+Saya adalah pengembang perangkat lunak yang memiliki ketertarikan mendalam pada pembangunan aplikasi web yang fungsional dan indah. **rentalinCo** adalah salah satu portofolio saya yang mendemonstrasikan kemampuan dalam merancang alur logika bisnis yang kompleks menjadi antarmuka yang sederhana dan menarik.
 
-- **Username:** admin
-- **Password:** admin123
+> *"Coding is not just about functionality, it's about crafting an experience."*
 
-## 📝 Catatan
-
-- Railway Free Trial memberikan $5 credit
-- Untuk kebutuhan production, upgrade ke paid plan
-- Database MySQL Railway akan sleep jika tidak aktif (free tier)
-
-## 👨‍💻 Developer
-
-VHRent - Vehicle Rental Management System
-# rentalinCo
-# rentalinCo
+---
+© 2024 rentalinCo. All Rights Reserved.
