@@ -1,3 +1,6 @@
+
+![Cover Image](img/cover_git.png)
+
 # rentalinCo - Vehicle Rental Management System
 
 **rentalinCo** adalah aplikasi manajemen penyewaan kendaraan berbasis web yang dirancang untuk memberikan solusi digital yang efisien, modern, dan mudah digunakan bagi bisnis rental.
