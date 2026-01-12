@@ -32,8 +32,10 @@ Sistem ini dibuat untuk menjawab kebutuhan operasional bisnis rental kendaraan, 
 
 ## Profil
 
-**[Muhammad Rizky Raka Pratama]**
-*Full Stack Web Developer*
+**[Muhammad Rizky Raka Pratama]**  
+312210397  
+Teknik Informatika  
+Universitas Pelita Bangsa  
 
 ---
 © 2026 rentalinCo. All Rights Reserved.
