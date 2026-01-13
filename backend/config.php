@@ -19,12 +19,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-// Database configuration - Uses environment variables for Railway, fallback for local
-define('DB_HOST', getenv('MYSQL_HOST') ?: getenv('MYSQLHOST') ?: 'localhost');
-define('DB_USER', getenv('MYSQL_USER') ?: getenv('MYSQLUSER') ?: 'root');
-define('DB_PASS', getenv('MYSQL_PASSWORD') ?: getenv('MYSQLPASSWORD') ?: '');
-define('DB_NAME', getenv('MYSQL_DATABASE') ?: getenv('MYSQLDATABASE') ?: 'vhrent');
-define('DB_PORT', getenv('MYSQL_PORT') ?: getenv('MYSQLPORT') ?: '3306');
+// Database configuration
+// ⚠️ UBAH NILAI INI SESUAI DENGAN HOSTING ANDA
+define('DB_HOST', 'localhost');          // Host database (biasanya 'localhost')
+define('DB_USER', 'root');               // Username database dari cPanel
+define('DB_PASS', '');                   // Password database dari cPanel
+define('DB_NAME', 'vhrent');             // Nama database yang Anda buat
+define('DB_PORT', '3306');               // Port MySQL (biasanya 3306)
 
 // Session configuration
 session_start();
