@@ -2226,20 +2226,23 @@ body.sidebar-collapsed .sidebar-footer {
         font-size: 1rem;
     }
 
-    /* Modal full screen on mobile */
+    /* Modal centered on mobile (not fullscreen) */
     .modal-overlay {
-        padding: 0;
+        padding: var(--space-4);
+        align-items: center;
     }
 
     .modal {
-        margin: 0;
-        max-height: 100vh;
-        height: 100vh;
-        border-radius: 0;
+        margin: auto;
+        max-height: 90vh;
+        height: auto;
+        border-radius: var(--radius-xl);
+        width: 100%;
+        max-width: 400px;
     }
 
     .modal-header {
-        padding-top: calc(var(--space-4) + env(safe-area-inset-top, 20px));
+        padding: var(--space-4);
         text-align: center;
         justify-content: center;
         position: relative;
@@ -2247,16 +2250,18 @@ body.sidebar-collapsed .sidebar-footer {
 
     .modal-header .modal-close {
         position: absolute;
-        right: var(--space-4);
-        top: calc(var(--space-4) + env(safe-area-inset-top, 20px));
+        right: var(--space-3);
+        top: var(--space-3);
     }
 
     .modal-header .modal-title {
         margin: 0 auto;
+        padding-right: var(--space-6);
     }
 
     .modal-body {
-        max-height: calc(100vh - 140px - env(safe-area-inset-top, 20px));
+        max-height: 60vh;
+        overflow-y: auto;
     }
 
     /* Sidebar */
