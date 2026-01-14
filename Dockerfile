@@ -1,6 +1,6 @@
 FROM php:8.2-apache
 
-# Build trigger: 2026-01-15-00-34
+# Build trigger v2: 2026-01-15-00-36
 
 # Install dependencies dan ekstensi PHP yang diperlukan
 RUN apt-get update && apt-get install -y \
@@ -14,8 +14,10 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Fix MPM conflict - disable mpm_event and enable mpm_prefork
-RUN a2dismod mpm_event && a2enmod mpm_prefork
+# Fix MPM conflict - remove ALL mpm configs then enable only prefork
+RUN rm -f /etc/apache2/mods-enabled/mpm_*.conf /etc/apache2/mods-enabled/mpm_*.load \
+    && ln -sf /etc/apache2/mods-available/mpm_prefork.conf /etc/apache2/mods-enabled/ \
+    && ln -sf /etc/apache2/mods-available/mpm_prefork.load /etc/apache2/mods-enabled/
 
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
