@@ -2238,8 +2238,25 @@ body.sidebar-collapsed .sidebar-footer {
         border-radius: 0;
     }
 
+    .modal-header {
+        padding-top: calc(var(--space-4) + env(safe-area-inset-top, 20px));
+        text-align: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .modal-header .modal-close {
+        position: absolute;
+        right: var(--space-4);
+        top: calc(var(--space-4) + env(safe-area-inset-top, 20px));
+    }
+
+    .modal-header .modal-title {
+        margin: 0 auto;
+    }
+
     .modal-body {
-        max-height: calc(100vh - 140px);
+        max-height: calc(100vh - 140px - env(safe-area-inset-top, 20px));
     }
 
     /* Sidebar */
