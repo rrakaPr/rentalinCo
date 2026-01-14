@@ -34,8 +34,8 @@ class Database
 {
     private $host = MYSQLHOST;
     private $user = MYSQLUSER;
-    private $pass = MYSQLPASS;
-    private $dbname = MYSQLDB;
+    private $pass = MYSQLPASSWORD;
+    private $dbname = MYSQLDATABASE;
     private $port = MYSQLPORT;
 
     private $conn;

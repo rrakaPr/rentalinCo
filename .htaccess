@@ -1,0 +1,9 @@
+RewriteEngine On
+
+# Handle API requests
+RewriteRule ^api/(.*)$ backend/$1.php [L,QSA]
+
+# If the request is not a file or directory, serve index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php [L,QSA]
