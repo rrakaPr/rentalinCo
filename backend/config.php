@@ -20,12 +20,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // Database configuration
-// ⚠️ UBAH NILAI INI SESUAI DENGAN HOSTING ANDA
-define('DB_HOST', 'localhost');          // Host database (biasanya 'localhost')
-define('DB_USER', 'root');               // Username database dari cPanel
-define('DB_PASS', '');                   // Password database dari cPanel
-define('DB_NAME', 'vhrent');             // Nama database yang Anda buat
-define('DB_PORT', '3306');               // Port MySQL (biasanya 3306)
+define('MYSQLHOST', getenv('MYSQLHOST') ?: 'mysql.railway.internal');
+define('MYSQLUSER', getenv('MYSQLUSER') ?: 'root');
+define('MYSQLPASSWORD', getenv('MYSQLPASSWORD') ?: '');
+define('MYSQLDATABASE', getenv('MYSQLDATABASE') ?: 'vhrent');
+define('MYSQLPORT', getenv('MYSQLPORT') ?: '3306');
 
 // Session configuration
 session_start();
@@ -33,11 +32,11 @@ session_start();
 // Database connection class
 class Database
 {
-    private $host = DB_HOST;
-    private $user = DB_USER;
-    private $pass = DB_PASS;
-    private $dbname = DB_NAME;
-    private $port = DB_PORT;
+    private $host = MYSQLHOST;
+    private $user = MYSQLUSER;
+    private $pass = MYSQLPASS;
+    private $dbname = MYSQLDB;
+    private $port = MYSQLPORT;
 
     private $conn;
     private $error;
