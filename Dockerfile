@@ -12,6 +12,9 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Fix MPM conflict - disable mpm_event and enable mpm_prefork
+RUN a2dismod mpm_event && a2enmod mpm_prefork
+
 # Enable Apache mod_rewrite
 RUN a2enmod rewrite
 
@@ -28,7 +31,7 @@ COPY . /var/www/html/
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html
 
-# Expose port (Railway akan set PORT env variable)
+# Expose port 80
 EXPOSE 80
 
 # Start Apache
